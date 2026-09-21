@@ -1,0 +1,133 @@
+\ProvidesPackage{math-hse}[2013/09/21 v0.0.3]
+
+\DeclareOption{a4paper}{
+\topmargin=-1cm
+\oddsidemargin=-0cm
+\textheight=22.2cm
+\textwidth=16cm
+\headheight=13.6mm
+}
+
+\DeclareOption{a5paper}{
+\topmargin=-20mm
+\oddsidemargin=-1cm
+\textheight=15cm
+\textwidth=12cm
+\headheight=13.6mm
+}
+
+\DeclareOption{matfak}{
+\makeatletter
+\renewcommand{\maketitle}{%
+\begin{center}
+	{\Large\@title\par}
+	{\small \@date}
+\end{center}
+\vskip 1em
+}
+\makeatother
+}
+
+\DeclareOption{kafedra}{
+\makeatletter
+\renewcommand{\maketitle}{%
+\noindent
+{\bf \faculty, \uchgod{} \UCHGOD}
+
+\noindent
+
+\noindent {\bf \coursename} \ifdefined\courseurl (\href{\courseurl}{\courseurl}) \fi
+
+\noindent {\bf \@title\ (\@date)}
+
+
+\noindent \emph{\@author}
+\vskip 1em
+}
+\makeatother
+}
+
+
+\ExecuteOptions{a4paper,kafedra}
+\ProcessOptions
+
+\RequirePackage{amssymb,bm,amsmath,amssymb,amsthm,xspace}
+\RequirePackage{etoolbox}[2011/01/03]
+\RequirePackage{cmap}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1,T2A]{fontenc}
+\RequirePackage[russian]{babel}
+\RequirePackage{fancyhdr}
+\RequirePackage[unicode]{hyperref}
+\RequirePackage{graphicx}
+
+\newcommand{\UCHGOD}{уч. год}
+
+\newif\ifcomments
+\newif\ifsolutions
+\ifdefined\hsemode\else\def\hsemode{student}\fi
+\RequirePackage{hse-mode-\hsemode}
+% \RequirePackage{hse-coursedata}
+
+\ifcomments
+\newcommand{\comment}[2][]{ #1 $\blacktriangleright$\emph{#2}$\blacktriangleleft$}
+\else
+\newcommand{\comment}[2][]{}
+\fi
+
+\ifsolutions
+\long\def\startsolution#1\stopsolution{\begin{solution}#1\end{solution}}
+\else
+\long\def\startsolution#1\stopsolution{}
+\fi
+
+\pagestyle{fancy}
+\makeatletter
+\fancyhead[R]{\footnotesize \university, \uchgod, «\coursename»}
+\fancyhead[L]{\footnotesize \faculty}
+\fancyfoot[L]{\footnotesize \@author}
+\fancyfoot[R]{\thepage}
+\fancyfoot[C]{}
+
+\AtBeginDocument{\maketitle}
+\AtBeginDocument{\hypersetup{pdftitle=\@title,pdfauthor=\@author}}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem*{theorem*}{Теорема}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{corollary}{Следствие}
+\newtheorem{maintheorem}{Основная теорема}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{remark}{Замечание}
+\newtheorem*{remark*}{Замечание}
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}
+\newtheorem{convention}{Соглашение}
+\newtheorem{problem}[theorem]{Задача}
+\newtheorem*{exercise}{Упражнение}
+\newtheorem{assignment}{Задание}
+\newtheorem{example}{Пример}
+\newtheorem*{example*}{Пример}
+\newtheorem*{examples}{Примеры}
+\newtheorem*{solution}{Решение}
+\newtheorem*{hint}{Указание}
+
+% TODO: hyperref yields warnings
+\newcommand{\subprob}{\refstepcounter{enumii}\labelenumii\xspace}
+\makeatletter
+\AtBeginEnvironment{problem}{\advance\@enumdepth 1\relax}
+\renewcommand{\p@enumii}{\theproblem}
+\renewcommand{\@listI}{%
+\leftmargin=25pt
+\rightmargin=0pt
+\labelsep=5pt
+\labelwidth=20pt
+\itemindent=0pt
+\listparindent=0pt
+\topsep=2pt plus 2pt minus 4pt
+\partopsep=2pt plus 1pt minus 1pt
+\parsep=0pt plus 1pt
+\itemsep=\parsep}
+\makeatother
+
+\providecommand{\eps}{\varepsilon}
