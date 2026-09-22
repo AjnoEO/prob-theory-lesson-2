@@ -61,6 +61,14 @@
 \RequirePackage[unicode]{hyperref}
 \RequirePackage{graphicx}
 
+% Commands used in normal text may expand to TeX primitives when
+% hyperref constructs PDF metadata strings.  Give them PDF-safe
+% representations.
+\pdfstringdefDisableCommands{%
+  \def\,{ }%
+  \def~{ }%
+}
+
 \newcommand{\UCHGOD}{уч. год}
 
 \newif\ifcomments
