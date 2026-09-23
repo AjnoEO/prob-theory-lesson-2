@@ -109,7 +109,7 @@ $H_1$, $H_2$, $H_3$ попарно несовместны и вместе обр
 			%======================
 			% Круг множества A
 			%======================
-            \draw[fill=\hColor!30, draw=\aColor]
+            \draw[fill=\hColor!25, draw=\aColor]
             (\centerX,\centerY) circle (\radius);
 
             \node[anchor=south,color=\aColor] at (\centerX,\centerY+\radius)
@@ -202,24 +202,108 @@ $P(H_{2})=\frac{1}{3}$,~~~~$P(A|H_{2})=1$
 Напомним, что по формуле полной вероятности, $P(A)$ представляется в виде суммы
 трех слагаемых, каждое из которых выражает долю отличников с соответствующего
 факультета от числа всех студентов вуза:
-\begin{equation*}
+\begin{equation}\label{eq:PA}
 	P(A)=P(A|H_1)\cdot P(H_1)+P(A|H_2)\cdot P(H_2)+P(A|H_3)\cdot P(H_3)
-\end{equation*}
+\end{equation}
 % В этом месте есть кажущееся несоответствие условию задачи. Ведь мы \emph{знаем},
 % что студент оказался отличником, т.\,е.~ событие $A$ произошло, зачем же мы ищем
 % вероятность этого события? На самом деле, здесь $P(A)$ \emph{априорная}
 % вероятность события $A$, просто вероятность выбрать отличника, выбирая случайного
 % студента.
 
-Нас интересует, какую долю составляет первое слагаемое ($P(A|H_1)\cdot P(H_1)$) в
-этой сумме~--- это и есть условная вероятность выбрать отличника с математического
-факультета, выбирая из всех отличников. Иными словами, нас интересует отношение
+По определению условной вероятности, $P(H_{1} \vert A) = \frac{P(H_{1} \cup A)}{P(A)}$.
+Согласно~(\ref{eq:AH1}), $P(H_{1}A)=P(A\cap H_1)=P(A|H_{1})\cdot P(H_{1})$. Иными
+словами, нас интересует, какую долю составляет первое слагаемое в
+сумме~(\ref{eq:PA})~--- это и есть условная вероятность выбрать отличника с
+математического факультета, выбирая из всех отличников (см.~рис.~\ref{fig:bayes}).
+Значит, нас интересует отношение
 \begin{equation*}
 	P(H_1|A)
     = \frac{P(A|H_1)\cdot P(H_1)}{P(A)}
     = \frac{P(A|H_1)\cdot P(H_1)}{P(A|H_1)\cdot
 	P(H_1)+P(A|H_2)\cdot P(H_2)+P(A|H_3)\cdot P(H_3)}
 \end{equation*}
+
+
+\begin{figure}[hbt]
+\begin{center}
+	\resizebox{0.7\textwidth}{!}{%
+		\begin{tikzpicture}[>={Latex[length=3mm,width=2mm]}, line width=1pt]
+            
+			%======================
+			% Параметры цвета и размера
+			%======================
+			\def\hColor{blue}             % Цвет для гипотез
+            \def\omegaColor{orange}       % Цвет для пространства
+            \def\aColor{red}              % Цвет для множества А
+            \def\haColor{purple}          % Цвет для множества А
+			\def\centerX{9.0}             % Координата X центра множества A
+            \def\centerY{3.0}             % Координата Y центра множества A
+            \def\radius{2.0}              % Радиус множества A
+            \def\hOneX{1.0}               % Координата X первого многоугольника
+            \def\hOneY{5.0}               % Координата Y первого многоугольника
+            \def\hTwoX{12.0}              % Координата X второго многоугольника
+            \def\hTwoY{4.0}               % Координата Y второго многоугольника
+			
+			%======================
+			% Прямоугольник множества Ω
+			%======================
+			\draw[fill=\hColor!10, draw=\omegaColor]
+            (1.0,0.0) rectangle (12.0,8.0);
+
+            \node[anchor=north,color=\omegaColor] at (6.0,8.0) {\Huge $\Omega$};
+
+			%======================
+			% Круг множества A
+			%======================
+            \draw[fill=\hColor!25, draw=\aColor]
+            (\centerX,\centerY) circle (\radius);
+
+            \node[anchor=south,color=\aColor] at (\centerX,\centerY+\radius)
+            {\huge $A$};
+
+			%======================
+			% Сектор пересечения H_1 с A
+			%======================
+            \pgfmathsetmacro{\hOneAngle}{atan2(\hOneY-\centerY,\hOneX-\centerX)}
+            \pgfmathsetmacro{\hTwoAngle}{atan2(\hTwoY-\centerY,\hTwoX-\centerX)}
+
+            \fill[\haColor!40]
+                (\centerX,\centerY)
+                -- ++(\hTwoAngle:\radius)
+                arc[start angle=\hTwoAngle,
+                    end angle=\hOneAngle,
+                    radius=\radius]
+                -- cycle;
+            
+            \draw[draw=\aColor]
+                (\centerX,\centerY) circle (\radius);
+
+            %======================
+            % Многоугольники гипотез
+            %======================
+            \foreach \x/\y/\hx/\hy/\hanch/\haalpha/\hadist/\h/\col in {
+				\hOneX/\hOneY/1.0/5.0/south west/90/0.7/H_1/\haColor,
+				\hTwoX/\hTwoY/12.0/0.0/south east/-30/1.0/H_2/\hColor,
+				9.0/0.0/4.5/0.0/south/-150/1.0/H_3/\hColor
+			} {
+				% Линии
+				\draw[\omegaColor]
+                (\x,\y) -- (\centerX,\centerY);
+                
+                \node[anchor=\hanch,color=\hColor] at (\hx, \hy)
+                    {\huge $\h$};
+                
+                \node[color=\col] at ($(\centerX,\centerY) + (\haalpha:\hadist)$)
+                    {\Large $\h \cap A$};
+			}
+			
+		\end{tikzpicture}
+	}
+    \caption{$P(H_1 \vert A)$ соответствует доле фиолетового сектора в круге $A$.}
+    \label{fig:bayes}
+\end{center}
+\end{figure}
 Полученная формула называется \emph{формулой апостериорной вероятности}, или
 \emph{формулой Байеса} В рассмотренном примере интересующая нас вероятность есть
 отношение $\frac{0.025}{0.625}=0.04$. Как и в случае формулы полной вероятности,
