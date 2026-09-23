@@ -409,14 +409,80 @@ $$
     результат теста, гораздо больше получивших ложный положительный результат
     ($5\%$ от $99,9\%$ населения), чем людей, действительно зараженных ВИЧ
     ($0{,}1\%$ населения), а тем более, действительно больных, получивших
-    положительный результат теста. % ~--- см. рисунок~\ref{fig:hivtest}.
+    положительный результат теста~--- см.~рис.~\ref{fig:hivtest}.
 
-    % \begin{figure}[htb]
-    % 	\begin{center}
-    % 		% \includegraphics[scale=0.7]{hivtest.pdf}
-    % 		\caption{Применение формулы Байеса в случае теста на ВИЧ. Тонкая полоска слева~--- люди, зараженные ВИЧ. Темный закрашенный прямоугольник~--- те из них, кто получил положительный результат теста. Длинный закрашенный прямоугольник справа — здоровые люди, получившие положительный результат теста. Доля больных людей мала по сравнению со всеми людьми, получившими положительный результат.}\label{fig:hivtest}
-    % 	\end{center}
-    % \end{figure}
+    \begin{figure}[htb]
+    \begin{center}\resizebox{0.95\textwidth}{!}{%
+		\begin{tikzpicture}[>={Latex[length=3mm,width=2mm]}, line width=0.5pt]
+            
+			%======================
+			% Параметры цвета и размера
+			%======================
+			\def\bgColor{blue}             % Цвет фона
+            \def\illColor{red}             % Цвет для заражённых
+            \def\negOpacity{20}            % Отрицательное значение теста
+            \def\posOpacity{50}            % Положительное значение теста
+            \def\leftX{0.0}                % Координата X левой границы
+            \def\rightX{25.0}              % Координата X правой границы
+            \def\topY{4.0}                 % Координата Y верхней границы
+            \def\bottomY{0.0}              % Координата Y нижней
+            
+			%======================
+			% Вычисление долей
+			%======================
+            \pgfmathsetmacro{\illX}{\leftX + (\rightX - \leftX) * 0.01}
+            \pgfmathsetmacro{\illPosY}{\bottomY + (\topY - \bottomY) * 0.85}
+            \pgfmathsetmacro{\healthyPosY}{\bottomY + (\topY - \bottomY) * 0.15}
+			
+			%======================
+			% Прямоугольники
+			%======================
+			\draw[fill=\bgColor!\negOpacity, draw=\bgColor]
+            (\leftX,\bottomY) rectangle (\rightX,\topY);
+
+			\draw[fill=\illColor!\negOpacity, draw=\bgColor]
+            (\leftX,\bottomY) rectangle (\illX,\topY);
+
+			\draw[fill=\bgColor!\posOpacity, draw=\bgColor]
+            (\illX,\bottomY) rectangle (\rightX,\healthyPosY);
+
+			\draw[fill=\illColor!\posOpacity, draw=\bgColor]
+            (\leftX,\bottomY) rectangle (\illX,\illPosY);
+
+			%======================
+			% Подписи
+			%======================            
+            \node[anchor=north east,text height=1.5em,color=\bgColor]
+            at (\illX,\bottomY) {\huge $1$};
+            \node[anchor=north,text height=1.5em,color=\bgColor]
+            at (\illX,\bottomY) {\huge $:$};
+            \node[anchor=north west,text height=1.5em,color=\bgColor]
+            at (\illX,\bottomY) {\huge $999$};
+
+            \node[anchor=north east,text height=1.5em,rotate=-90,color=\bgColor]
+            at (\leftX,\illPosY) {\huge $5$};
+            \node[anchor=north,text height=1.5em,rotate=-90,color=\bgColor]
+            at (\leftX,\illPosY) {\huge $:$};
+            \node[anchor=north west,text height=1.5em,rotate=-90,color=\bgColor]
+            at (\leftX,\illPosY) {\huge $95$};
+
+            \node[anchor=north east,text height=1.5em,rotate=90,color=\bgColor]
+            at (\rightX,\healthyPosY) {\huge $5$};
+            \node[anchor=north,text height=1.5em,rotate=90,color=\bgColor]
+            at (\rightX,\healthyPosY) {\huge $:$};
+            \node[anchor=north west,text height=1.5em,rotate=90,color=\bgColor]
+            at (\rightX,\healthyPosY) {\huge $95$};
+			
+		\end{tikzpicture}
+	}
+        % \includegraphics[scale=0.7]{hivtest.pdf}
+        \caption{
+            Применение формулы Байеса в случае теста на ВИЧ. Cлева~--- люди,
+            заражённые ВИЧ. Тёмные области снизу~--- те, кто получил
+            положительный результат теста.
+        }\label{fig:hivtest}
+    \end{center}
+    \end{figure}
 \end{example}
 
 \begin{example}
