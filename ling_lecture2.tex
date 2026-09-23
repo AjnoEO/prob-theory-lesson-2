@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
 %autocompile publish
 \usepackage{math-hse,array,tikz,amsfonts}
-\usetikzlibrary{hobby,decorations.pathreplacing,arrows.meta}
+\usetikzlibrary{hobby,decorations.pathreplacing,arrows.meta,calc}
 \title{Лекция 2. Основные понятия теории вероятностей}
 
 \date{??.01.2027}
@@ -77,12 +77,68 @@ $$
 Один студент учится на одном и только на одном факультете, то есть события
 $H_1$, $H_2$, $H_3$ попарно несовместны и вместе образуют всё вероятностное
 пространство. Иными словами, эти события разбивают всё вероятностное пространство
-на несколько непересекающихся частей. В этом случае такие события часто называют
+на несколько непересекающихся частей (см.~рис.~\ref{fig:fp}). В этом случае такие события часто называют
 \emph{гипотезами}, и говорят, что они образуют <<полную систему событий>>. Тот факт,
 что гипотезы попарно несовместны, и что в объединении они дают всё вероятностное
 пространство, очень важен~--- он означает, что всегда реализуется в точности одна
 гипотеза.
 
+\begin{figure}[hbt]
+\begin{center}
+	\resizebox{0.7\textwidth}{!}{%
+		\begin{tikzpicture}[>={Latex[length=3mm,width=2mm]}, line width=1pt]
+            
+			%======================
+			% Параметры цвета и размера
+			%======================
+			\def\hColor{blue}             % Цвет для гипотез
+            \def\omegaColor{orange}       % Цвет для пространства
+            \def\aColor{red}              % Цвет для множества А
+			\def\centerX{9.0}             % Координата X центра множества A
+            \def\centerY{3.0}             % Координата Y центра множества A
+            \def\radius{2.0}              % Радиус множества A
+			
+			%======================
+			% Прямоугольник множества Ω
+			%======================
+			\draw[fill=\hColor!10, draw=\omegaColor]
+            (1.0,0.0) rectangle (12.0,8.0);
+
+            \node[anchor=north,color=\omegaColor] at (6.0,8.0) {\Huge $\Omega$};
+
+			%======================
+			% Круг множества A
+			%======================
+            \draw[fill=\hColor!30, draw=\aColor]
+            (\centerX,\centerY) circle (\radius);
+
+            \node[anchor=south,color=\aColor] at (\centerX,\centerY+\radius)
+            {\huge $A$};
+
+            %======================
+            % Многоугольники гипотез
+            %======================
+            \foreach \x/\y/\hx/\hy/\hanch/\haalpha/\hadist/\h in {
+				1.0/5.0/1.0/5.0/south west/90/0.7/H_1,
+				12.0/4.0/12.0/0.0/south east/-30/1.0/H_2,
+				9.0/0.0/4.5/0.0/south/-150/1.0/H_3
+			} {
+				% Линии
+				\draw[\omegaColor]
+                (\x,\y) -- (\centerX,\centerY);
+                
+                \node[anchor=\hanch,color=\hColor] at (\hx, \hy)
+                    {\huge $\h$};
+                
+                \node[color=\hColor] at ($(\centerX,\centerY) + (\haalpha:\hadist)$)
+                    {\Large $\h \cap A$};
+			}
+			
+		\end{tikzpicture}
+	}
+    \caption{Разбиение вероятностного пространства на гипотезы.}\label{fig:fp}
+\end{center}
+\end{figure}
 Событие $A$ можно представить как объединение кусочков, лежащих в $H_1$, $H_2$,
 $H_3$, то есть $A=(A\cap H_1)\cup (A\cap H_2)\cup (A\cap H_3)$. События
 $A\cap H_1$, $A\cap H_2$, $A\cap H_3$ тоже не пересекаются, и значит их вероятности
